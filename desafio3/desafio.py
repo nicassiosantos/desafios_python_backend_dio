@@ -1,8 +1,5 @@
 from abc import ABC, abstractmethod, abstractclassmethod
 
-saldo = 0
-extrato = ""
-numero_saques = 0
 numero_conta = 1
 LIMITE_SAQUES = 3
 NUMERO_AGENCIA = 1

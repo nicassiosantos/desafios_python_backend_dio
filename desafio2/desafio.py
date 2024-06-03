@@ -139,7 +139,7 @@ def saque(*,saldo, valor, extrato, limite, numero_saques,limite_saques):
     else: 
         saldo -= valor
         numero_saques += 1
-        extrato = f"\nSaque: R${valornum:.2f}" + extrato 
+        extrato = f"\nSaque: R${valor:.2f}" + extrato 
         print("Saque realizado com sucesso")
         return saldo, extrato, numero_saques
     

@@ -17,11 +17,12 @@ class ContaIterador:
 
     def __next__(self):
         try: 
-            conta = self._contas()[self._contador]
-            self.contador += 1 
-
+            conta = self._contas[self._contador]
+            return conta
         except IndexError:
             raise StopIteration
+        finally:
+            self._contador += 1 
 
 #Classe abstrata para servir como interface para as classes de Deposito e Saque
 class Transacao(ABC):
@@ -76,15 +77,17 @@ class Saque(Transacao):
 
 #Classe responsável por manter os historico das transações feitas por uma conta
 class Historico: 
+
     def __init__(self, transacoes=[]): 
         self._transacoes = transacoes
+
     #Função responsável por adicionar uma transação ao historico 
     def adicionar_transacao(self, transacao):
         self._transacoes.append(
             {
                 "tipo": transacao.__class__.__name__,
                 "valor": transacao.valor, 
-                "data": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+                "data": datetime.utcnow().strftime("%d-%m-%Y %H:%M:%S"),
             }
         ) 
 
@@ -98,7 +101,16 @@ class Historico:
             if not tipo_transacao: 
                 yield transacao 
             elif tipo_transacao.lower() == transacao["tipo"].lower(): 
-                yield transacao
+                yield transacao 
+
+    def transacoes_do_dia(self): 
+        data_atual = datetime.utcnow().date
+        transacoes = [] 
+        for transacao in self.transacoes:
+            data_transacao = datetime.strptime(transacao['data'], "%d-%m-%Y %H:%M:%S").date()
+            if data_atual == data_transacao: 
+                transacoes.append(transacao) 
+        return transacoes
 
 #Classe conta onde um cliente pode realizar movimentações 
 class Conta: 
@@ -199,6 +211,9 @@ class Cliente:
 
     #Função responsavel por realizar uma transação em uma conta especifica de um cliente
     def realizar_transacao(self, conta, transacao, **kw): 
+        if len(conta.historico.transacoes_do_dia()) >= 10:
+            print("Numero diario Limite de transações por dia atingido!!!")
+            return 
         transacao.registrar(conta)
 
     #Função responsavel por adicionar uma nova conta no perfil do cliente 
@@ -311,7 +326,7 @@ def listar_contas(clientes):
     existe_conta = False
     if clientes: 
         for cliente in clientes:
-            for conta in cliente.contas:
+            for conta in ContaIterador(cliente.contas):
                 if(conta):
                     if not(existe_conta):
                         print("===========CONTAS===========")

@@ -1,0 +1,5 @@
+[2024-06-21 01:18:29] Função 'cadastro_cliente' executada com ([<PessoaFisica: ('1')],) e {}. Retornou None
+[2024-06-21 01:18:34] Função 'cadastro_conta' executada com ([<PessoaFisica: ('1')],) e {}. Retornou None
+[2024-06-21 01:18:39] Função 'deposito' executada com ([<PessoaFisica: ('1')],) e {}. Retornou None
+[2024-06-21 01:18:47] Função 'saque' executada com ([<PessoaFisica: ('1')],) e {}. Retornou None
+[2024-06-21 01:18:57] Função 'func_extrato' executada com ([<PessoaFisica: ('1')],) e {}. Retornou None
